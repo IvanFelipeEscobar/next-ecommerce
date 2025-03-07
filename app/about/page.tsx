@@ -1,6 +1,8 @@
-const About = () => {
+
+const About = async () => {
   return (
-    <div>About</div>
+    <>about
+    </>
   )
 }
 export default About

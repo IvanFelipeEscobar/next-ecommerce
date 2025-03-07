@@ -18,3 +18,4 @@ export const links: NavLink[] = [
   { href: '/cart', label: 'cart' },
   { href: '/orders', label: 'orders' },
 ]
+
