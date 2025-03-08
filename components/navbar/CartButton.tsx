@@ -8,7 +8,7 @@ const CartButton = () => {
     <Button asChild variant={'outline'} size={'icon'} className="flex justify-center items-center relative">
         <Link href={'/cart'}>
         <LuShoppingCart />
-        <span className="absolute -top-3 -right-3 bg-primary text-white rounded-full h-6 w-6 flex items-center justify-center">
+        <span className="absolute -top-3 -right-3 bg-primary text-white dark:text-black rounded-full h-6 w-6 flex items-center justify-center">
             {itemsInCart}
         </span>
         </Link>
