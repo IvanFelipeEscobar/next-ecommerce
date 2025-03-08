@@ -1,6 +1,17 @@
-const Products = () => {
+import ProductsContainer from '@/components/products/ProductsContainer'
+
+const Products = async ({
+  searchParams,
+}: {
+  searchParams: { layout?: string; search?: string }
+}) => {
+  const sP = await searchParams
+  const layout = sP.layout || 'grid'
+  const search = sP.search || ''
   return (
-    <div>Products</div>
+    <>
+      <ProductsContainer layout={layout} search={search} />
+    </>
   )
 }
 export default Products
