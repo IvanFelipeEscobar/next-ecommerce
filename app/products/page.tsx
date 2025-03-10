@@ -3,7 +3,7 @@ import ProductsContainer from '@/components/products/ProductsContainer'
 const Products = async ({
   searchParams,
 }: {
-  searchParams: { layout?: string; search?: string }
+  searchParams: Promise<{ layout?: string; search?: string }>
 }) => {
   const sP = await searchParams
   const layout = sP.layout || 'grid'
