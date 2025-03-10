@@ -6,24 +6,25 @@ import { fetchSingleProduct } from '@/lib/actions'
 import { formatCurrency } from '@/lib/utils'
 import Image from 'next/image'
 
-const SingleProduct = async ({ params }: { params: { id: string } }) => {
+const SingleProduct = async ({ params }: { params: Promise<{ id: string }> }) => {
+
   const { id } = await params
   const product = await fetchSingleProduct(id)
-
   const { name, price, image, company, description } = product
   const dollarPrice = formatCurrency(price)
+
   return (
     <section>
       <BreadCrumbs name={name} />
-      <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16">
-        <div className="relative h-full">
+      <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16 lg:h-3/4">
+        <div className="relative h-[500px] lg:h-full">
           <Image
             src={image}
             alt={name}
             fill
-            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 33vw"
+            sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw,33vw"
             priority
-            className="w-full rounded object-cover"
+            className="w-full rounded-md object-cover"
           />
         </div>
         <div>
