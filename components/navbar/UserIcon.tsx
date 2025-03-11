@@ -1,7 +1,6 @@
 import { currentUser } from '@clerk/nextjs/server'
 import { LuUser } from 'react-icons/lu'
-
-import Image from 'next/image'
+// import Image from 'next/image'
 
 const UserIcon = async () => {
   const user = await currentUser()
@@ -9,7 +8,7 @@ const UserIcon = async () => {
 
   if (avatar)
     return (
-      <Image
+      <img
         src={avatar}
         alt="user avatar"
         className="size-6 rounded-full object-cover"
