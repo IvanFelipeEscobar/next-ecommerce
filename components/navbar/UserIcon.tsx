@@ -1,5 +1,6 @@
 import { currentUser } from '@clerk/nextjs/server'
-import { LucideUser2 } from 'lucide-react'
+import { LuUser } from 'react-icons/lu'
+
 import Image from 'next/image'
 
 const UserIcon = async () => {
@@ -15,6 +16,6 @@ const UserIcon = async () => {
       />
     )
 
-  return <LucideUser2 className='size-6 rounded-full text-white'/>
+  return <LuUser className='size-6 rounded-full'/>
 }
 export default UserIcon

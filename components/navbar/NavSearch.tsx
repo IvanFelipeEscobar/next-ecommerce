@@ -30,6 +30,7 @@ const NavSearch = () => {
   return (
     <Input
       type="search"
+      id='nav-search'
       placeholder="search products..."
       className="max-w-3xs dark:bg-muted"
       value={search}
