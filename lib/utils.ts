@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -17,12 +17,19 @@ export const links: NavLink[] = [
   { href: '/favorites', label: 'favorites' },
   { href: '/cart', label: 'cart' },
   { href: '/orders', label: 'orders' },
+  { href: '/admin/sales', label: 'dashboard' },
 ]
 
-export const formatCurrency = ( amount :  number | null ) => {
+export const adminLinks: NavLink[] = [
+  { href: '/admin/sales', label: 'sales' },
+  { href: '/admin/products', label: 'my products' },
+  { href: '/admin/products/create', label: 'create product' },
+]
+
+export const formatCurrency = (amount: number | null) => {
   const value = amount || 0
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD'
+    currency: 'USD',
   }).format(value)
 }
