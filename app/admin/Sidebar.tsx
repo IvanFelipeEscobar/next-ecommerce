@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { adminLinks } from '@/lib/utils'
 import Link from 'next/link'
