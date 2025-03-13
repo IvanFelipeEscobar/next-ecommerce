@@ -23,3 +23,7 @@ export const fetchSingleProduct = async (productId: string) => {
 
   return product
 }
+export const createProduct = async (formData: FormData) => {
+  const data = Object.fromEntries(formData)
+  console.log(data)
+}
