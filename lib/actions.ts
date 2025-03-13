@@ -1,3 +1,4 @@
+'use server'
 import { redirect } from 'next/navigation'
 import prisma from './prisma'
 
@@ -23,7 +24,9 @@ export const fetchSingleProduct = async (productId: string) => {
 
   return product
 }
-export const createProduct = async (formData: FormData) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createProduct = async (prevState: any, formData: FormData) => {
   const data = Object.fromEntries(formData)
   console.log(data)
+  return {message: 'product'}
 }

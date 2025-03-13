@@ -5,7 +5,7 @@ import { Checkbox } from '../ui/checkbox'
 type CheckboxIputProps = {
   name: string
   label: string
-  defaultChecked: boolean
+  defaultChecked?: boolean
 }
 
 const CheckboxInput = ({

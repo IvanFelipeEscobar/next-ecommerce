@@ -15,11 +15,11 @@ type SubmitButtonProps = {
   size?: btnSize
 }
 
-export function SubmitButton({
+export const SubmitButton = ({
   className = '',
   text = 'submit',
   size = 'lg',
-}: SubmitButtonProps) {
+}: SubmitButtonProps) => {
   const { pending } = useFormStatus()
 
   return (
@@ -31,7 +31,7 @@ export function SubmitButton({
     >
       {pending ? (
         <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <Loader2 className="mr-2 size-4 animate-spin" />
           Please wait...
         </>
       ) : (
