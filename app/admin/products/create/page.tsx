@@ -34,16 +34,16 @@ const CreateProduct = () => {
             />
             <PriceInput />
             <ImageInput />
-            <TextArea
-              name="description"
-              label="product description"
-              defaultValue={description}
-            />
-            <div className="mt-6">
-              <CheckboxInput name="featured" label="featured" />
-            </div>
-            <SubmitButton text="create product" className="mt-8" />{' '}
           </div>
+          <TextArea
+            name="description"
+            label="product description"
+            defaultValue={description}
+          />
+          <div className="mt-6">
+            <CheckboxInput name="featured" label="featured" />
+          </div>
+          <SubmitButton text="create product" className="mt-8" />{' '}
         </FormContainer>
       </div>
     </section>
