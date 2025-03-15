@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'https://fcmhjbwlgslvoqykraqr.supabase.co',
+        hostname: 'fcmhjbwlgslvoqykraqr.supabase.co',
       },
     ],
   },
