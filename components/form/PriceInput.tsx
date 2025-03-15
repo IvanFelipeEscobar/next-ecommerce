@@ -13,8 +13,9 @@ const PriceInput = ({ defaultValue }: { defaultValue?: number }) => {
         id={name}
         name={name}
         type="number"
+        step='any'
         min={0}
-        defaultValue={defaultValue || 109.99}
+        defaultValue={defaultValue || 100}
         required
       />
     </div>
