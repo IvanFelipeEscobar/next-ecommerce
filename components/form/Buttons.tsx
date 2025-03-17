@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 // import { SignInButton } from '@clerk/nextjs'
 // import { FaRegHeart, FaHeart } from 'react-icons/fa'
-// import { LuTrash2, LuPenSquare } from 'react-icons/lu'
+import { LuTrash2, LuSquarePen } from 'react-icons/lu'
 
 type btnSize = 'default' | 'lg' | 'sm'
 
@@ -37,6 +37,24 @@ export const SubmitButton = ({
       ) : (
         text
       )}
+    </Button>
+  )
+}
+
+type ActionType = 'edit' | 'delete'
+
+export const IconButton = ({actionType} : {actionType: ActionType}) => {
+  const {pending} = useFormStatus()
+
+  const renderIcon = () => actionType === 'edit' ? <LuSquarePen /> : <LuTrash2 />
+  return (
+    <Button
+      type="submit"
+      size="icon"
+      variant="link"
+      className="p-2 cursor-pointer"
+    >
+      {pending ? <Loader2 className="animate-spin" /> : renderIcon()}
     </Button>
   )
 }

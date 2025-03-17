@@ -12,6 +12,12 @@ const getAuth = async () => {
   return user
 }
 
+const getAdminUser = async () => {
+  const admin = await getAuth()
+  if (admin.id !== process.env.ADMIN_USER_ID) redirect('/')
+
+  return admin
+}
 const renderError = (error: unknown): { message: string } => {
   console.error(error)
   return {
@@ -63,4 +69,9 @@ export const createProduct = async (
     return renderError(error)
   }
   redirect('/admin/products')
+}
+
+export const fetchAdminProduct = async () => {
+  await getAdminUser()
+  return await prisma.product.findMany({ orderBy: { createdAt: 'desc' } })
 }
