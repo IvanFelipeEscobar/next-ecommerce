@@ -4,6 +4,7 @@ import prisma from './prisma'
 import { currentUser } from '@clerk/nextjs/server'
 import { imageSchema, productSchema, validateWithSchema } from './schema'
 import { uploadImage } from './supabase'
+import { revalidatePath } from 'next/cache'
 
 const getAuth = async () => {
   const user = await currentUser()
@@ -74,4 +75,16 @@ export const createProduct = async (
 export const fetchAdminProduct = async () => {
   await getAdminUser()
   return await prisma.product.findMany({ orderBy: { createdAt: 'desc' } })
+}
+
+export const deleteProduct = async (prevState: { productId: string }) => {
+  const { productId } = prevState
+  await getAdminUser()
+  try {
+    await prisma.product.delete({ where: { id: productId } })
+    revalidatePath('/admin/products')
+    return { message: 'product removed' }
+  } catch (error) {
+    return renderError(error)
+  }
 }
