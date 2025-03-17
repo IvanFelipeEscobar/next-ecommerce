@@ -1,5 +1,5 @@
-const EditProduct = ({ params }: { params: { id: string } }) => {
-  const { id } = params
+const EditProduct = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params
   console.log(id)
   return <div>EditProduct</div>
 }
