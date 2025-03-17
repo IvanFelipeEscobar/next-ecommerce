@@ -58,7 +58,7 @@ const AdminProductsPage = async () => {
                 <TableCell>{company}</TableCell>
                 <TableCell>{dollarPrice}</TableCell>
                 <TableCell className="flex items-center gap-x-2">
-                  <Link href={`admin/products/${productId}`}>
+                  <Link href={`/admin/products/${productId}`}>
                     <IconButton actionType="edit" />
                   </Link>
                   <DeleteProduct productId={productId} />
