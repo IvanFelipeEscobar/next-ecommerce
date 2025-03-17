@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import prisma from './prisma'
 import { currentUser } from '@clerk/nextjs/server'
 import { imageSchema, productSchema, validateWithSchema } from './schema'
-import { uploadImage } from './supabase'
+import { deleteImage, uploadImage } from './supabase'
 import { revalidatePath } from 'next/cache'
 
 const getAuth = async () => {
@@ -81,10 +81,31 @@ export const deleteProduct = async (prevState: { productId: string }) => {
   const { productId } = prevState
   await getAdminUser()
   try {
-    await prisma.product.delete({ where: { id: productId } })
+    const product = await prisma.product.delete({ where: { id: productId } })
+    await deleteImage(product.image)
     revalidatePath('/admin/products')
     return { message: 'product removed' }
   } catch (error) {
     return renderError(error)
   }
+}
+
+export const fetchProductDetails = async (productId: string) => {
+  await getAdminUser()
+  const product = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+  })
+  if (!product) redirect('/admin/products')
+  return product
+}
+
+export const updateProduct = async (prevState: unknown, formData: FormData) => {
+  console.log(prevState, formData)
+  return { message: 'product updated succesfully' }
+}
+export const updateImage = async (prevState: unknown, formData: FormData) => {
+  console.log(prevState, formData)
+  return { message: 'product image updated succesfully' }
 }
