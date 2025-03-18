@@ -9,22 +9,22 @@ import { revalidatePath } from 'next/cache'
 const getAuth = async () => {
   const user = await currentUser()
   if (!user) redirect('/')
-
   return user
 }
 
 const getAdminUser = async () => {
   const admin = await getAuth()
   if (admin.id !== process.env.ADMIN_USER_ID) redirect('/')
-
   return admin
 }
+
 const renderError = (error: unknown): { message: string } => {
   console.error(error)
   return {
     message: error instanceof Error ? error.message : 'there was an error...',
   }
 }
+
 export const fetchFeatured = async () =>
   await prisma.product.findMany({ where: { featured: true } })
 
