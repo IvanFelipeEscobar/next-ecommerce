@@ -7,7 +7,7 @@ const FavoriteToggleButton = async ({ productId }: { productId: string }) => {
   const { userId } = await auth()
   if (!userId) return <CardSigninButton />
 
-  const favId = await fetchFavId({ productId })
+  const favId = await fetchFavId( productId )
 
   return <FavoriteToggleForm favoriteId={favId} productId={productId} />
 }

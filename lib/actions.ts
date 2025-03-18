@@ -139,7 +139,7 @@ export const updateImage = async (prevState: unknown, formData: FormData) => {
   }
 }
 
-export const fetchFavId = async ({ productId }: { productId: string }) => {
+export const fetchFavId = async (productId: string ) => {
   const user = await getAuth()
   const favorite = await prisma.favorite.findFirst({
     where: {

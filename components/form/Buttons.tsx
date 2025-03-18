@@ -80,7 +80,7 @@ export const CardSubmitButton = ({ isFav }: { isFav: boolean }) => {
   const { pending } = useFormStatus()
   return (
     <Button
-      type="button"
+      type="submit"
       size={'icon'}
       variant={'outline'}
       className="p-2 cursor-pointer"

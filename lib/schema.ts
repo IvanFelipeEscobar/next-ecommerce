@@ -39,9 +39,11 @@ const validateImageFile = () => {
       )
     }, 'File must be an image')
 }
+
 export const imageSchema = z.object({
   image: validateImageFile(),
 })
+
 export const validateWithSchema = <T>(
   schema: ZodSchema<T>,
   data: unknown
@@ -49,7 +51,7 @@ export const validateWithSchema = <T>(
   const validatedData = schema.safeParse(data)
   if (!validatedData.success) {
     const err = validatedData.error.errors.map((e) => e.message)
-    throw new Error(err.join(' , '))
+    throw new Error(err.join(', '))
   }
   return validatedData.data
 }
