@@ -102,10 +102,39 @@ export const fetchProductDetails = async (productId: string) => {
 }
 
 export const updateProduct = async (prevState: unknown, formData: FormData) => {
-  console.log(prevState, formData)
+  await getAdminUser()
+
+  try {
+    const id = formData.get('id') as string
+    const data = Object.fromEntries(formData)
+    const productData = validateWithSchema(productSchema, data)
+    await prisma.product.update({
+      where: { id },
+      data: { ...productData },
+    })
+    revalidatePath(`/admin/products/${id}`)
+  } catch (error) {
+    return renderError(error)
+  }
+
   return { message: 'product updated succesfully' }
 }
 export const updateImage = async (prevState: unknown, formData: FormData) => {
-  console.log(prevState, formData)
-  return { message: 'product image updated succesfully' }
+  await getAdminUser()
+  try {
+    const img = formData.get('image') as File
+    const oldImg = formData.get('url') as string
+    const id = formData.get('id') as string
+    const validFile = validateWithSchema(imageSchema, { image: img })
+    const imgPath = await uploadImage(validFile.image)
+    await deleteImage(oldImg)
+    await prisma.product.update({
+      where: { id },
+      data: { image: imgPath },
+    })
+    revalidatePath(`/admin/products/${id}`)
+    return { message: 'product image updated succesfully' }
+  } catch (error) {
+    return renderError(error)
+  }
 }
