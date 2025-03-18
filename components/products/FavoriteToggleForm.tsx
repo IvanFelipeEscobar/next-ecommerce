@@ -1,3 +1,4 @@
+'use client'
 import { toggleFavorite } from "@/lib/actions"
 import { usePathname } from "next/navigation"
 import FormContainer from "../form/FormContainer"
