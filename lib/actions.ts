@@ -2,10 +2,14 @@
 import { redirect } from 'next/navigation'
 import prisma from './prisma'
 import { currentUser } from '@clerk/nextjs/server'
-import { imageSchema, productSchema, validateWithSchema } from './schema'
+import {
+  imageSchema,
+  productSchema,
+  reviewSchema,
+  validateWithSchema,
+} from './schema'
 import { deleteImage, uploadImage } from './supabase'
 import { revalidatePath } from 'next/cache'
-
 
 const getAuth = async () => {
   const user = await currentUser()
@@ -185,33 +189,90 @@ export const toggleFavorite = async (prevState: {
   }
 }
 
-export const fetchFavorites = async() => {
+export const fetchFavorites = async () => {
   const user = await getAuth()
   const favorites = await prisma.favorite.findMany({
     where: {
-      clerkId: user.id
+      clerkId: user.id,
     },
     include: {
-      product: true
-    }
+      product: true,
+    },
   })
-return favorites
+  return favorites
 }
 
 export const createReview = async (prevState: unknown, formData: FormData) => {
-  const user = getAuth()
-try {
-  const data = Object.fromEntries(formData)
-  console.log(user, data)
-
-return { message: 'Your review has been submitted' }
-} catch (error) {
-  return renderError(error)
+  const user = await getAuth()
+  try {
+    const data = Object.fromEntries(formData)
+    const reviewData = validateWithSchema(reviewSchema, data)
+    await prisma.review.create({
+      data: { ...reviewData, clerkId: user.id },
+    })
+    revalidatePath(`/products/${reviewData.productId}`)
+    return { message: 'Your review has been submitted' }
+  } catch (error) {
+    return renderError(error)
+  }
 }
+
+export const fetchReviews = async (productId: string) =>
+  await prisma.review.findMany({
+    where: { productId },
+    orderBy: { createdAt: 'desc' },
+  })
+
+export const fetchRating = async (productId: string) => {
+  const ratings = await prisma.review.groupBy({
+    by: ['productId'],
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: { productId },
+  })
+  return {
+    rating: ratings[0]?._avg.rating?.toFixed(1) ?? 0,
+    count: ratings[0]?._count.rating ?? 0,
+  }
 }
 
-export const fetchReviews = async () => {}
-export const fetchReviewsFromUser = async () => {}
-export const deleteReview = async () => {}
+export const fetchReviewsFromUser = async () => {
+  const user = await getAuth()
+  return await prisma.review.findMany({
+    where: {
+      clerkId: user.id,
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      product: {
+        select: {
+          image: true,
+          name: true,
+        },
+      },
+    },
+  })
+}
+export const deleteReview = async (prevState: { reviewId: string }) => {
+  const { reviewId } = prevState
+  const user = await getAuth()
+  try {
+    await prisma.review.delete({
+      where: {
+        id: reviewId,
+        clerkId: user.id,
+      },
+    })
+    revalidatePath('/reviews')
+    return { message: 'Review has been deleted' }
+  } catch (error) {
+    return renderError(error)
+  }
+}
 export const findReview = async () => {}
-export const fetchRating = async () => {}

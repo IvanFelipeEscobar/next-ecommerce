@@ -17,7 +17,7 @@ const SubmitReview = ({productId} : {productId: string}) => {
     <div>
       <Button
         size={'lg'}
-        className="capitalize"
+        className="capitalize mt-4"
         onClick={() => setFormVisible((prevState) => !prevState)}
       >
         {!isFormVisible ? 'leave a review' : 'close review input'}
