@@ -13,7 +13,7 @@ const PriceInput = ({ defaultValue }: { defaultValue?: number }) => {
         id={name}
         name={name}
         type="number"
-        step='any'
+        step='0.01'
         min={0}
         defaultValue={defaultValue || 100}
         required

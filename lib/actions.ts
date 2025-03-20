@@ -6,6 +6,7 @@ import { imageSchema, productSchema, validateWithSchema } from './schema'
 import { deleteImage, uploadImage } from './supabase'
 import { revalidatePath } from 'next/cache'
 
+
 const getAuth = async () => {
   const user = await currentUser()
   if (!user) redirect('/')
@@ -196,3 +197,21 @@ export const fetchFavorites = async() => {
   })
 return favorites
 }
+
+export const createReview = async (prevState: unknown, formData: FormData) => {
+  const user = getAuth()
+try {
+  const data = Object.fromEntries(formData)
+  console.log(user, data)
+
+return { message: 'Your review has been submitted' }
+} catch (error) {
+  return renderError(error)
+}
+}
+
+export const fetchReviews = async () => {}
+export const fetchReviewsFromUser = async () => {}
+export const deleteReview = async () => {}
+export const findReview = async () => {}
+export const fetchRating = async () => {}

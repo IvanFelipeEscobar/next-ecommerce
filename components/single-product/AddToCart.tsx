@@ -1,7 +1,7 @@
 import { Button } from '../ui/button'
 
 const AddToCart = ({ productId }: { productId: string }) => {
- console.log(productId) 
+ console.log(productId, 'addtocart component') 
  return (
     <Button
       className="capitalize mt-8"

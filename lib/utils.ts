@@ -1,3 +1,4 @@
+import { Decimal } from '@prisma/client/runtime/library'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -26,10 +27,10 @@ export const adminLinks: NavLink[] = [
   { href: '/admin/products/create', label: 'create product' },
 ]
 
-export const formatCurrency = (amount: number | null) => {
+export const formatCurrency = (amount: Decimal | null) => {
   const value = amount || 0
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-  }).format(value)
+  }).format(+value)
 }

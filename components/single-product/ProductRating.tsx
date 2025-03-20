@@ -1,6 +1,6 @@
 import { FaStar } from 'react-icons/fa'
 const ProductRating = ({ productId }: { productId: string }) => {
-  console.log(productId)
+  console.log(productId, 'location product rating component')
   const rating = 4.2
   const count = 25
 

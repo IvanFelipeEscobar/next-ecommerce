@@ -34,7 +34,7 @@ const EditProduct = async ({ params }: { params: Promise<{ id: string }> }) => {
               label="company name"
               defaultValue={company}
             />
-            <PriceInput defaultValue={price} />
+            <PriceInput defaultValue={+price} />
           </div>
           <TextArea
             name="description"

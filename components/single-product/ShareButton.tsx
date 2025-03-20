@@ -43,7 +43,7 @@ const ShareButton = ({
           <LinkedinIcon size={32} round />
         </LinkedinShareButton>
 
-        <EmailShareButton url={shareLink} title={name}>
+        <EmailShareButton url={shareLink} title={name} subject='Check out this item I found'>
           <EmailIcon size={32} round />
         </EmailShareButton>
 
