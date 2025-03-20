@@ -183,3 +183,16 @@ export const toggleFavorite = async (prevState: {
     return renderError(error)
   }
 }
+
+export const fetchFavorites = async() => {
+  const user = await getAuth()
+  const favorites = await prisma.favorite.findMany({
+    where: {
+      clerkId: user.id
+    },
+    include: {
+      product: true
+    }
+  })
+return favorites
+}
