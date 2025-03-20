@@ -139,7 +139,7 @@ export const updateImage = async (prevState: unknown, formData: FormData) => {
   }
 }
 
-export const fetchFavId = async (productId: string ) => {
+export const fetchFavId = async (productId: string) => {
   const user = await getAuth()
   const favorite = await prisma.favorite.findFirst({
     where: {
@@ -147,38 +147,39 @@ export const fetchFavId = async (productId: string ) => {
       clerkId: user.id,
     },
     select: {
-      id: true
-    }
+      id: true,
+    },
   })
   return favorite?.id || null
 }
 
-export const toggleFavorite = async (prevState : {
+export const toggleFavorite = async (prevState: {
   productId: string
   favoriteId: string | null
   pathName: string
 }) => {
   const user = await getAuth()
-  const {productId, favoriteId, pathName} = prevState
+  const { productId, favoriteId, pathName } = prevState
   try {
-    if(favoriteId) {
+    if (favoriteId) {
       await prisma.favorite.delete({
         where: {
-          id: favoriteId
-        }
+          id: favoriteId,
+        },
       })
     } else {
       await prisma.favorite.create({
         data: {
           productId,
-          clerkId: user.id
-        }
+          clerkId: user.id,
+        },
       })
     }
     revalidatePath(pathName)
-    return { message: favoriteId ? 'removed from favorites' : 'added to favorites' }
+    return {
+      message: favoriteId ? 'removed from favorites' : 'added to favorites',
+    }
   } catch (error) {
     return renderError(error)
   }
-  
 }

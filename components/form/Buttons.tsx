@@ -84,7 +84,6 @@ export const CardSubmitButton = ({ isFav }: { isFav: boolean }) => {
       size={'icon'}
       variant={'outline'}
       className="p-2 cursor-pointer"
-      asChild
     >
       {pending ? (
         <Loader2 className="animate-spin" />

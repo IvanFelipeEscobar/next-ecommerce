@@ -43,7 +43,7 @@ const CreateProduct = () => {
           <div className="mt-6">
             <CheckboxInput name="featured" label="featured" />
           </div>
-          <SubmitButton text="create product" className="mt-8" />{' '}
+          <SubmitButton text="create product" className="mt-8" />
         </FormContainer>
       </div>
     </section>
