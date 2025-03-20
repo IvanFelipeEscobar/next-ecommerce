@@ -9,12 +9,12 @@ const ProductsList = ({ products }: { products: Product[] }) => {
   return (
     <div className="mt-12 grid gap-y-8">
       {products.map((product) => {
-        const { name, price, image, company, id } = product
+        const { name, price, image, company, id, amountInStock } = product
         const productId = id
         const dollarPrice = formatCurrency(price)
         return (
           <article key={productId} className="group relative">
-            <Link href={`/products/${productId}`}>
+            <Link href={ amountInStock > 0 ? `/products/${productId}` : {}}>
               <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
                 <CardContent className="gap-y-4 grid md:grid-cols-3">
                   <div className="relative h-64 md:size-48">
@@ -35,6 +35,17 @@ const ProductsList = ({ products }: { products: Product[] }) => {
                   <p className="text-muted-foreground text-lg md:ml-auto">
                     {dollarPrice}
                   </p>
+                  {amountInStock === 0 ? (
+                    <p className="absolute top-9 -left-2 -rotate-45 bg-red-400 rounded-full px-3 font-mono text-xs">
+                      out of stock
+                    </p>
+                  ) : amountInStock === 1 ? (
+                    <p className="absolute top-9 -left-2 -rotate-45 bg-red-400 rounded-full px-3 font-mono text-xs">
+                      only 1 left
+                    </p>
+                  ) : (
+                    ''
+                  )}
                 </CardContent>
               </Card>
             </Link>

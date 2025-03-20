@@ -9,13 +9,18 @@ import { fetchProductDetails, updateImage, updateProduct } from '@/lib/actions'
 
 const EditProduct = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
-  const { name, company, description, featured, price, image } =
+  const { name, company, description, featured, price, image, amountInStock } =
     await fetchProductDetails(id)
   return (
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">update product</h1>
       <div className="border p-8 rounded-md">
-        <ImageInputContainer action={updateImage} name={name} image={image} text='update image'>
+        <ImageInputContainer
+          action={updateImage}
+          name={name}
+          image={image}
+          text="update image"
+        >
           <input type="hidden" name="id" value={id} />
           <input type="hidden" name="url" value={image} />
         </ImageInputContainer>
@@ -33,6 +38,12 @@ const EditProduct = async ({ params }: { params: Promise<{ id: string }> }) => {
               name="company"
               label="company name"
               defaultValue={company}
+            />
+            <FormInput
+              type="number"
+              name="amountInStock"
+              label="amount in stock"
+              defaultValue={amountInStock.toString()}
             />
             <PriceInput defaultValue={+price} />
           </div>

@@ -1,9 +1,10 @@
 import Link from "next/link"
 import { Button } from "../ui/button"
 import { LuShoppingCart } from "react-icons/lu"
+import { fetchCartItems } from "@/lib/actions"
 
-const CartButton = () => {
-    const itemsInCart = 9
+const CartButton = async () => {
+    const itemsInCart = await fetchCartItems()
   return (
     <Button asChild variant={'outline'} size={'icon'} className="flex justify-center items-center relative">
         <Link href={'/cart'}>

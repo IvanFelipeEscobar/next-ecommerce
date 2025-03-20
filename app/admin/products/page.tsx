@@ -38,12 +38,13 @@ const AdminProductsPage = async () => {
             <TableHead>Product Name</TableHead>
             <TableHead>Company</TableHead>
             <TableHead>Price</TableHead>
+            <TableHead>Stock</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {items.map((item) => {
-            const { id: productId, name, company, price } = item
+            const { id: productId, name, company, price, amountInStock } = item
             const dollarPrice = formatCurrency(price)
             return (
               <TableRow key={productId}>
@@ -57,6 +58,7 @@ const AdminProductsPage = async () => {
                 </TableCell>
                 <TableCell>{company}</TableCell>
                 <TableCell>{dollarPrice}</TableCell>
+                <TableCell className='text-center'>{amountInStock}</TableCell>
                 <TableCell className="flex items-center gap-x-2">
                   <Link href={`/admin/products/${productId}`}>
                     <IconButton actionType="edit" />

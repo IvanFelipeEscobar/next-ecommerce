@@ -95,3 +95,16 @@ export const CardSubmitButton = ({ isFav }: { isFav: boolean }) => {
     </Button>
   )
 }
+
+export const ProductSigninButton = () => {
+  return (
+    <SignInButton mode="modal">
+      <Button
+        type="button"
+        className="mt-8 capitalize"
+      >
+        sign in
+      </Button>
+    </SignInButton>
+  )
+}

@@ -9,12 +9,12 @@ const ProductsGrid = ({ products }: { products: Product[] }) => {
   return (
     <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {products.map((product) => {
-        const { name, price, image, id } = product
+        const { name, price, image, id, amountInStock } = product
         const productId = id
         const dollarPrice = formatCurrency(price)
         return (
           <article key={id} className="group relative">
-            <Link href={`/products/${productId}`}>
+            <Link href={amountInStock > 0 ? `/products/${productId}` : {}}>
               <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
                 <CardContent>
                   <div className="relative h-64 md:h-48 rounded-bl-md overflow-hidden">
@@ -31,6 +31,12 @@ const ProductsGrid = ({ products }: { products: Product[] }) => {
                     <h2 className="capitalize text-lg">{name}</h2>
                     <p className="text-muted-foreground mt-2">{dollarPrice}</p>
                   </div>
+                 { amountInStock === 0 ?
+                  <p className='absolute top-9 -left-2 -rotate-45 bg-red-400 rounded-full px-3 font-mono text-xs'>out of stock</p>
+                : amountInStock === 1 ?
+                  <p className='absolute top-9 -left-2 -rotate-45 bg-red-400 rounded-full px-3 font-mono text-xs'>only 1 left</p> : ''
+                 }
+                  
                 </CardContent>
               </Card>
             </Link>

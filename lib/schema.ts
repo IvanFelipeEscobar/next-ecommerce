@@ -11,6 +11,7 @@ export const productSchema = z.object({
     }),
   company: z.string(),
   featured: z.coerce.boolean(),
+  amountInStock: z.coerce.number().min(0, {message: 'amount must be a positive number'}),
   price: z.coerce.number().min(0, {
     message: 'price must be a positive number.',
   }),

@@ -5,6 +5,7 @@ import AddToCart from '@/components/single-product/AddToCart'
 import BreadCrumbs from '@/components/single-product/BreadCrumbs'
 import ProductRating from '@/components/single-product/ProductRating'
 import ShareButton from '@/components/single-product/ShareButton'
+import { Button } from '@/components/ui/button'
 import { fetchSingleProduct, findReview } from '@/lib/actions'
 import { formatCurrency } from '@/lib/utils'
 import { auth } from '@clerk/nextjs/server'
@@ -17,10 +18,10 @@ const SingleProduct = async ({
 }) => {
   const { id } = await params
   const product = await fetchSingleProduct(id)
-  const { name, price, image, company, description } = product
+  const { name, price, image, company, description, amountInStock } = product
   const dollarPrice = formatCurrency(price)
-const {userId} = await auth()
-const noReviewFromUser = userId && !(await findReview(userId, id))
+  const { userId } = await auth()
+  const noReviewFromUser = userId && !(await findReview(userId, id))
   return (
     <section>
       <BreadCrumbs name={name} />
@@ -45,15 +46,28 @@ const noReviewFromUser = userId && !(await findReview(userId, id))
           </div>
           <ProductRating productId={id} />
           <h2 className="text-xl mt-2">{company}</h2>
-          <p className="mt-3 text-md bg-muted inline-block p-2 rounded-md">
-            {dollarPrice}
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="mt-3 text-md bg-muted inline-block p-2 rounded-md">
+              {dollarPrice}
+            </p>{' '}
+            <p className="text-muted-foreground">
+              <span className="font-extrabold">Items in stock:</span>{' '}
+              {amountInStock}
+            </p>
+          </div>
+
           <p className="mt-6 leading-8 text-muted-foreground">{description}</p>
-          <AddToCart productId={id} />
+          {amountInStock > 0 ? (
+            <AddToCart productId={id} />
+          ) : (
+            <Button className="capitalize mt-8" variant={'outline'} disabled>
+              Currently out of Stock
+            </Button>
+          )}
         </div>
       </div>
       <ProductReviews productId={id} />
-     {noReviewFromUser && <SubmitReview productId={id} />}
+      {noReviewFromUser && <SubmitReview productId={id} />}
     </section>
   )
 }
