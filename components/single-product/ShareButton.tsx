@@ -6,9 +6,11 @@ import {
   TwitterShareButton,
   EmailShareButton,
   LinkedinShareButton,
-  TwitterIcon,
   EmailIcon,
   LinkedinIcon,
+  FacebookShareButton,
+  FacebookIcon,
+  XIcon,
 } from 'react-share'
 
 const ShareButton = ({
@@ -34,7 +36,7 @@ const ShareButton = ({
         className="flex items-center gap-x-2 justify-center w-full"
       >
         <TwitterShareButton url={shareLink} title={name}>
-          <TwitterIcon size={32} round />
+          <XIcon size={32} round />
         </TwitterShareButton>
 
         <LinkedinShareButton url={shareLink} title={name}>
@@ -44,6 +46,10 @@ const ShareButton = ({
         <EmailShareButton url={shareLink} title={name}>
           <EmailIcon size={32} round />
         </EmailShareButton>
+
+        <FacebookShareButton url={shareLink} title={name}>
+            <FacebookIcon size={32} round />
+        </FacebookShareButton>
       </PopoverContent>
     </Popover>
   )
