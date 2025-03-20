@@ -2,12 +2,16 @@ import FavoriteToggleButton from '@/components/products/FavoriteToggleButton'
 import AddToCart from '@/components/single-product/AddToCart'
 import BreadCrumbs from '@/components/single-product/BreadCrumbs'
 import ProductRating from '@/components/single-product/ProductRating'
+import ShareButton from '@/components/single-product/ShareButton'
 import { fetchSingleProduct } from '@/lib/actions'
 import { formatCurrency } from '@/lib/utils'
 import Image from 'next/image'
 
-const SingleProduct = async ({ params }: { params: Promise<{ id: string }> }) => {
-
+const SingleProduct = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) => {
   const { id } = await params
   const product = await fetchSingleProduct(id)
   const { name, price, image, company, description } = product
@@ -30,7 +34,10 @@ const SingleProduct = async ({ params }: { params: Promise<{ id: string }> }) =>
         <div>
           <div className="flex gap-x-8 items-center">
             <h1 className="capitalize text-3xl font-bold">{name}</h1>
-            <FavoriteToggleButton productId={id} />
+            <div className="flex items-center gap-x-2">
+              <FavoriteToggleButton productId={id} />
+              <ShareButton productId={id} name={name}/>
+            </div>
           </div>
           <ProductRating productId={id} />
           <h2 className="text-xl mt-2">{company}</h2>
