@@ -5,8 +5,9 @@ import AddToCart from '@/components/single-product/AddToCart'
 import BreadCrumbs from '@/components/single-product/BreadCrumbs'
 import ProductRating from '@/components/single-product/ProductRating'
 import ShareButton from '@/components/single-product/ShareButton'
-import { fetchSingleProduct } from '@/lib/actions'
+import { fetchSingleProduct, findReview } from '@/lib/actions'
 import { formatCurrency } from '@/lib/utils'
+import { auth } from '@clerk/nextjs/server'
 import Image from 'next/image'
 
 const SingleProduct = async ({
@@ -18,7 +19,8 @@ const SingleProduct = async ({
   const product = await fetchSingleProduct(id)
   const { name, price, image, company, description } = product
   const dollarPrice = formatCurrency(price)
-
+const {userId} = await auth()
+const noReviewFromUser = userId && !(await findReview(userId, id))
   return (
     <section>
       <BreadCrumbs name={name} />
@@ -51,7 +53,7 @@ const SingleProduct = async ({
         </div>
       </div>
       <ProductReviews productId={id} />
-      <SubmitReview productId={id} />
+     {noReviewFromUser && <SubmitReview productId={id} />}
     </section>
   )
 }
