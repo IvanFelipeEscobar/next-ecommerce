@@ -34,7 +34,7 @@ const CartThirdComponent = ({
     toast(res.message)
     setIsLoading(false)
   }
-  console.log(amountInStock)
+
   return (
     <div className="md:ml-8">
       <SelectProductAmount

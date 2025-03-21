@@ -27,3 +27,7 @@ export type CartState = {
 export type CartItemWithProduct = Prisma.CartItemGetPayload<{
   include: { product: true }
 }>
+
+export type CartItemWithNumberPrice = Omit<CartItemWithProduct, 'product'> & {
+  product: Omit<CartItemWithProduct['product'], 'price'> & { price: number }
+}

@@ -1,11 +1,11 @@
 
 'use client'
-import { CartItemWithProduct } from "@/lib/types"
+import { CartItemWithNumberPrice } from "@/lib/types"
 import { Card } from "../ui/card"
 import { CardFirstComponent, CardFourthComponent, CardSecondComponent } from "./CartCardComponents"
 import CartThirdComponent from "./CartCardThirdComponent"
 
-const CartItemsContainer = ({cartItems} :{ cartItems: CartItemWithProduct[]}) => {
+const CartItemsContainer = ({cartItems} :{ cartItems: CartItemWithNumberPrice[]}) => {
   
   return (
     <div>

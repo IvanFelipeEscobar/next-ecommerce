@@ -12,12 +12,21 @@ const Cart = async () => {
   const {currentCart:cart, cartItems} = await updateCart(previousCart)
   if (cart.numItemsInCart === 0)
     return <SectionTitle text="you car is currently empty" />
+  
+  const cartItemsWithNumberPrice = cartItems.map((item) => ({
+    ...item,
+    product: {
+      ...item.product,
+      price: Number(item.product.price),
+    },
+  }))
+
 
   return <>
   <SectionTitle text='shopping cart' />
   <div className="mt-8 grid gap-4 md:grid-cols-12">
     <div className="md:col-span-8">
-      <CartItemsContainer cartItems={cartItems} />
+      <CartItemsContainer cartItems={cartItemsWithNumberPrice} />
     </div>
     <div className="md:col-span-4">
       <CartTotals cart={cart} />
