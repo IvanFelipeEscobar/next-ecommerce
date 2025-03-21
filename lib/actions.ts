@@ -379,6 +379,9 @@ export const updateCart = async (cart: Cart) => {
     include: {
       product: true,
     },
+    orderBy: {
+      createdAt: 'asc'
+    }
   })
   let cartItemsAmt = 0
   let cartTotal = 0
@@ -408,7 +411,7 @@ export const updateCart = async (cart: Cart) => {
       },
     },
   })
-  return currentCart
+  return {currentCart, cartItems}
 }
 
 

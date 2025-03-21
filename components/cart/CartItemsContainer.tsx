@@ -1,3 +1,5 @@
+
+'use client'
 import { CartItemWithProduct } from "@/lib/types"
 import { Card } from "../ui/card"
 import { CardFirstComponent, CardFourthComponent, CardSecondComponent } from "./CartCardComponents"
