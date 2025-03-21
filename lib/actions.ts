@@ -380,8 +380,8 @@ export const updateCart = async (cart: Cart) => {
       product: true,
     },
     orderBy: {
-      createdAt: 'asc'
-    }
+      createdAt: 'asc',
+    },
   })
   let cartItemsAmt = 0
   let cartTotal = 0
@@ -411,9 +411,8 @@ export const updateCart = async (cart: Cart) => {
       },
     },
   })
-  return {currentCart, cartItems}
+  return { currentCart, cartItems }
 }
-
 
 export const addToCartAction = async (
   prevState: unknown,
@@ -490,7 +489,6 @@ const adjustProductStock = async (productId: string, difference: number) => {
   }
 }
 
-
 export const updateCartItemAction = async ({
   amount,
   cartItemId,
@@ -518,8 +516,7 @@ export const updateCartItemAction = async ({
 
     const oldAmount = existingCartItem.amount
     const difference = amount - oldAmount
-console.log(`old Amount:  ${oldAmount} || diff: ${difference} || ${amount}`)
-
+    console.log(`old Amount:  ${oldAmount} || diff: ${difference} || ${amount}`)
 
     await prisma.cartItem.update({
       where: {
@@ -531,7 +528,7 @@ console.log(`old Amount:  ${oldAmount} || diff: ${difference} || ${amount}`)
       },
     })
 
-   await adjustProductStock(productId, difference)
+    await adjustProductStock(productId, difference)
 
     await updateCart(cart)
     revalidatePath('/cart')
@@ -541,7 +538,59 @@ console.log(`old Amount:  ${oldAmount} || diff: ${difference} || ${amount}`)
   }
 }
 
-export const createOrder = async (prevState: unknown, formData: FormData) => {
-  console.log(prevState, formData)
-  return { message: 'order created' }
+export const createOrder = async () => {
+  const user = await getAuth()
+  try {
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    })
+    await prisma.order.create({
+      data: {
+        clerkId: user.id,
+        products: cart.numItemsInCart,
+        orderTotal: cart.orderTotal,
+        tax: cart.tax,
+        shipping: cart.shipping,
+        email: user.emailAddresses[0].emailAddress,
+      },
+    })
+    await prisma.cart.delete({
+      where: {
+        id: cart.id,
+      },
+    })
+  } catch (error) {
+    return renderError(error)
+  }
+  redirect(`/orders`)
+}
+
+
+export const fetchUserOrders = async () => {
+  const user = await getAuth()
+  const orders = await prisma.order.findMany({
+    where: {
+      clerkId: user.id,
+      isPaid: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+  return orders
+}
+
+export const fetchAdminOrders = async () => {
+  await getAdminUser()
+
+  const orders = await prisma.order.findMany({
+    where: {
+      isPaid: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+  return orders
 }

@@ -35,3 +35,10 @@ export const formatCurrency = (amount: Decimal | null | number) => {
     currency: 'USD',
   }).format(+value)
 }
+
+export const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date)

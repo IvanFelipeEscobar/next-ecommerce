@@ -1,10 +1,4 @@
 'use client'
-
 import LoadingTable from "@/components/global/LoadingTable"
-
-const Loading = () => {
-  return (
-   <LoadingTable />
-  )
-}
+const Loading = () =>  <LoadingTable />
 export default Loading

@@ -49,7 +49,7 @@ const SingleProduct = async ({
           <div className="flex items-center justify-between">
             <p className="mt-3 text-md bg-muted inline-block p-2 rounded-md">
               {dollarPrice}
-            </p>{' '}
+            </p>
             <p className="text-muted-foreground">
               <span className="font-extrabold">Items in stock:</span>{' '}
               {amountInStock}
