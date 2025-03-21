@@ -1,5 +1,4 @@
 import CartItemsContainer from '@/components/cart/CartItemsContainer'
-import CartContainer from '@/components/cart/CartItemsContainer'
 import CartTotals from '@/components/cart/CartTotals'
 import SectionTitle from '@/components/global/SectionTitle'
 import { fetchOrCreateCart, updateCart } from '@/lib/actions'

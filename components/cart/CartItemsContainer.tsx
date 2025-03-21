@@ -14,7 +14,7 @@ const CartItemsContainer = ({cartItems} :{ cartItems: CartItemWithProduct[]}) =>
           <CardFirstComponent image={image} name={name} />
           <CardSecondComponent name={name} company={company} productId={productId} />
           <CartThirdComponent id={id} qty={amount} />
-          <CardFourthComponent price={price}/>
+          <CardFourthComponent price={+price}/>
         </Card>
       })}
     </div>
