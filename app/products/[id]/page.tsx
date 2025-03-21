@@ -58,7 +58,7 @@ const SingleProduct = async ({
 
           <p className="mt-6 leading-8 text-muted-foreground">{description}</p>
           {amountInStock > 0 ? (
-            <AddToCart productId={id} />
+            <AddToCart productId={id} amountInStock={amountInStock}/>
           ) : (
             <Button className="capitalize mt-8" variant={'outline'} disabled>
               Currently out of Stock

@@ -28,7 +28,7 @@ export const adminLinks: NavLink[] = [
   { href: '/admin/products/create', label: 'create product' },
 ]
 
-export const formatCurrency = (amount: Decimal | null) => {
+export const formatCurrency = (amount: Decimal | null | number) => {
   const value = amount || 0
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

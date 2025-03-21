@@ -40,7 +40,7 @@ const ProductsList = ({ products }: { products: Product[] }) => {
                       out of stock
                     </p>
                   ) : amountInStock === 1 ? (
-                    <p className="absolute top-9 -left-2 -rotate-45 bg-red-400 rounded-full px-3 font-mono text-xs">
+                    <p className="absolute top-9 -left-2 -rotate-45 bg-yellow-300 rounded-full px-3 font-mono text-xs">
                       only 1 left
                     </p>
                   ) : (

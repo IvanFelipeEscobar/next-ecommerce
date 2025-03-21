@@ -10,6 +10,7 @@ import {
 } from './schema'
 import { deleteImage, uploadImage } from './supabase'
 import { revalidatePath } from 'next/cache'
+import { Cart } from '@prisma/client'
 
 const getAuth = async () => {
   const user = await currentUser()
@@ -284,25 +285,161 @@ export const fetchCartItems = async () => {
   const { userId } = await auth()
   const cart = await prisma.cart.findFirst({
     where: {
-      clerkId: userId ?? ''
+      clerkId: userId ?? '',
     },
     select: {
-      numItemsInCart: true
-    }
+      numItemsInCart: true,
+    },
   })
   return cart?.numItemsInCart || 0
 }
 
-// const fetchProduct = async () => {}
+const fetchProduct = async (productId: string) => {
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+  })
+  if (!product || product.amountInStock === 0)
+    throw new Error('product not found')
+  return product
+}
 
-export const fetchOrCreateCart = async () => {}
+export const fetchOrCreateCart = async ({
+  userId,
+  errorOnFailure = false,
+}: {
+  userId: string
+  errorOnFailure?: boolean
+}) => {
+  let cart = await prisma.cart.findFirst({
+    where: {
+      clerkId: userId,
+    },
+    include: {
+      cartItems: {
+        include: {
+          product: true,
+        },
+      },
+    },
+  })
+  if (!cart && errorOnFailure) throw new Error('Cart not found')
 
-// const updateOrCreateCartItem = async () => {}
+  if (!cart) {
+    cart = await prisma.cart.create({
+      data: { clerkId: userId },
+      include: {
+        cartItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    })
+  }
+  return cart
+}
 
-export const updateCart = async () => {}
+const updateOrCreateCartItem = async ({
+  productId,
+  cartId,
+  amount,
+}: {
+  productId: string
+  cartId: string
+  amount: number
+}) => {
+  let cartItem = await prisma.cartItem.findFirst({
+    where: {
+      productId,
+      cartId,
+    },
+  })
 
-export const addToCartAction = async () => {}
+  if (cartItem) {
+    cartItem = await prisma.cartItem.update({
+      where: {
+        id: cartItem.id,
+      },
+      data: {
+        amount: cartItem.amount + amount,
+      },
+    })
+  } else {
+    cartItem = await prisma.cartItem.create({
+      data: { amount, productId, cartId },
+    })
+  }
+}
+
+export const updateCart = async (cart: Cart) => {
+  const cartItems = await prisma.cartItem.findMany({
+    where: {
+      cartId: cart.id,
+    },
+    include: {
+      product: true,
+    },
+  })
+  let cartItemsAmt = 0
+  let cartTotal = 0
+  for (const item of cartItems) {
+    cartItemsAmt += item.amount
+    cartTotal += item.amount * +item.product.price
+  }
+  const tax = +cart.taxRate * cartTotal
+  const shipping = cartTotal ? +cart.shipping : 0
+  const orderTotal = cartTotal + tax + shipping
+
+  const currentCart = await prisma.cart.update({
+    where: {
+      id: cart.id,
+    },
+    data: {
+      numItemsInCart: cartItemsAmt,
+      cartTotal,
+      tax,
+      orderTotal,
+    },
+    include: {
+      cartItems: {
+        include: {
+          product: true
+        }
+      }
+    }
+  })
+  return currentCart
+}
+
+export const addToCartAction = async (
+  prevState: unknown,
+  formData: FormData
+) => {
+  const user = await getAuth()
+  try {
+    const productId = formData.get('productId') as string
+    const amount = Number(formData.get('amount'))
+    await fetchProduct(productId)
+    const cart = await fetchOrCreateCart({ userId: user.id })
+    await updateOrCreateCartItem({ productId, cartId: cart.id, amount })
+    await updateCart(cart)
+    await prisma.product.update({
+      where: {id: productId},
+      data: {
+        amountInStock: { decrement: amount}
+      }
+    })
+  } catch (error) {
+    return renderError(error)
+  }
+  redirect('/cart')
+}
 
 export const removeCartItemAction = async () => {}
 
 export const updateCartItemAction = async () => {}
+
+export const createOrder = async (prevState: unknown, formData: FormData) => {
+  console.log(prevState, formData)
+  return {message: 'order created'}
+}
