@@ -35,7 +35,8 @@ const CreateProduct = () => {
             <FormInput
             type='number'
             name='amountInStock'
-            label='amount in stock'/>
+            label='amount in stock'
+            defaultValue='20'/>
             <PriceInput />
             <ImageInput />
           </div>
