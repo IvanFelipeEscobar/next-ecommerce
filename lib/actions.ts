@@ -403,13 +403,14 @@ export const updateCart = async (cart: Cart) => {
     include: {
       cartItems: {
         include: {
-          product: true
-        }
-      }
-    }
+          product: true,
+        },
+      },
+    },
   })
   return currentCart
 }
+
 
 export const addToCartAction = async (
   prevState: unknown,
@@ -423,11 +424,12 @@ export const addToCartAction = async (
     const cart = await fetchOrCreateCart({ userId: user.id })
     await updateOrCreateCartItem({ productId, cartId: cart.id, amount })
     await updateCart(cart)
+
     await prisma.product.update({
-      where: {id: productId},
+      where: { id: productId },
       data: {
-        amountInStock: { decrement: amount}
-      }
+        amountInStock: { decrement: amount },
+      },
     })
   } catch (error) {
     return renderError(error)
@@ -435,11 +437,108 @@ export const addToCartAction = async (
   redirect('/cart')
 }
 
-export const removeCartItemAction = async () => {}
+export const removeCartItemAction = async (
+  prevState: unknown,
+  formData: FormData
+) => {
+  const user = await getAuth()
+  try {
+    const cartItemId = formData.get('id') as string
+    const amount = Number(formData.get('amount'))
+    const productId = formData.get('productId') as string
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    })
+    await prisma.cartItem.delete({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+    })
+    await updateCart(cart)
 
-export const updateCartItemAction = async () => {}
+    await prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        amountInStock: { increment: amount },
+      },
+    })
+    revalidatePath('/cart')
+    return { message: 'item has been removed from the cart' }
+  } catch (error) {
+    return renderError(error)
+  }
+}
+
+const adjustProductStock = async (productId: string, difference: number) => {
+  if (difference > 0) {
+    await prisma.product.update({
+      where: { id: productId },
+      data: { amountInStock: { decrement: difference } },
+    })
+  } else if (difference < 0) {
+    await prisma.product.update({
+      where: { id: productId },
+      data: { amountInStock: { increment: Math.abs(difference) } },
+    })
+  }
+}
+
+
+export const updateCartItemAction = async ({
+  amount,
+  cartItemId,
+  productId,
+}: {
+  amount: number
+  cartItemId: string
+  productId: string
+}) => {
+  const user = await getAuth()
+  try {
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    })
+
+    const existingCartItem = await prisma.cartItem.findFirst({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+    })
+
+    if (!existingCartItem) throw new Error('Cart item not found')
+
+    const oldAmount = existingCartItem.amount
+    const difference = amount - oldAmount
+console.log(`old Amount:  ${oldAmount} || diff: ${difference} || ${amount}`)
+
+
+    await prisma.cartItem.update({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+      data: {
+        amount,
+      },
+    })
+
+   await adjustProductStock(productId, difference)
+
+    await updateCart(cart)
+    revalidatePath('/cart')
+    return { message: 'your cart has been updated' }
+  } catch (error) {
+    return renderError(error)
+  }
+}
 
 export const createOrder = async (prevState: unknown, formData: FormData) => {
   console.log(prevState, formData)
-  return {message: 'order created'}
+  return { message: 'order created' }
 }

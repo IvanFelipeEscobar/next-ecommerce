@@ -40,7 +40,7 @@ const SelectProductAmount = (
           <SelectValue placeholder={amount} />
         </SelectTrigger>
         <SelectContent>
-          {Array.from({ length: amountInStock < 20 ? amountInStock : 20}, (_, i) => {
+          {Array.from({ length: amountInStock < 20 ? (amountInStock + amount) : 20}, (_, i) => {
             const selectValue = (i + 1).toString()
             return (
               <SelectItem key={selectValue} value={selectValue}>

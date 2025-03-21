@@ -15,11 +15,11 @@ const Cart = async () => {
 
   return <>
   <SectionTitle text='shopping cart' />
-  <div className="mt-8 grid gap-4 lg:grid-cols-12">
-    <div className="lg:col-span-8">
+  <div className="mt-8 grid gap-4 md:grid-cols-12">
+    <div className="md:col-span-8">
       <CartItemsContainer cartItems={cart.cartItems} />
     </div>
-    <div className="lg:col-span-4">
+    <div className="md:col-span-4">
       <CartTotals cart={cart} />
     </div>
   </div>
